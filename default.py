@@ -2,7 +2,7 @@
 ###	#	
 ### # Project: 			#		Code Lyoko Evolution - by The Highway 2013.
 ### # Author: 			#		The Highway
-### # Version:			#		v0.1.0
+### # Version:			#		v0.1.1
 ### # Description: 	#		http://codelyokoevolutionfan.webs.com/
 ###	#	
 ### ############################################################################################################
@@ -189,7 +189,7 @@ def ListItems(section, url, pgNo='1', pgCount='1', oldTitle=''):
 		except: 
 			try:		pgNextNo=re.compile('page=(\d+)', re.IGNORECASE | re.DOTALL).findall(pgNext+'&')[0]
 			except: pgNextNo='?'
-		_addon.add_directory({'mode': 'GetTitles', 'section': section, 'url': cat_url },{'title':  cFL('['+cFL(iFL('Next: '+pgNextNo+' '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL(cat_name[0:1],ps('cFL_color'))+cat_name[1:]})
+		_addon.add_directory({'mode': 'GetTitles', 'section': section, 'url': cat_url },{'title':  cFL('['+cFL(iFL('Next: '+pgNextNo+' '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL(cat_name[0:1],ps('cFL_color'))+cat_name[1:]},img=_artIcon, fanart=_artFanart)
 	if ('<table cellspacing="0" cellpadding="0" border="0" class="fw-list-grid"><tr><td align="center"' in html_): html=html_.split('<table cellspacing="0" cellpadding="0" border="0" class="fw-list-grid"><tr><td align="center"')[1]
 	else: html=html_
 	### s='<div class="thumbnail" style="position:relative" onmouseover="fwGetContextBar\('+"'videoContextBar'\)\.show\(this, '(\d+)'\)"+';return false;">[\n]\s+<a href="(.+?)"><img src="(.+?)" border="0"></a>[\n]\s+<div style=".+?"></div>[\n]\s+</div>[\n]\s+<div class="clear"></div>[\n]\s+<b><a href=".+?" title=".+?"><span class="fw_sanitized">(.+?)</span></a></b>[\n]\s+<br>[\n]\s+<div style=".+?">[\n]\s+by <a href=".+?" style=".+?">.+?</a> on (\D+ \d+, \d\d\d\d) at (\d+:\d+ \D+)\s+<br>[\n]\s+(\d+) Views - (\d+) Comments'
@@ -201,7 +201,7 @@ def ListItems(section, url, pgNo='1', pgCount='1', oldTitle=''):
 	### ( item_id , item_url , item_img , item_title , item_added_date, item_added_time, item_views, item_comments )
 	if (not Items) or (Items==''): eod(); return
 	for ( item_id , item_url , item_img , item_title , item_added_date, item_added_time, item_views, item_comments ) in Items:
-		_addon.add_directory({'mode': 'GetVideos', 'section': section, 'title': item_title, 'url': item_url, 'img': item_img },{'date': item_added_date, 'time': item_added_time, 'title':  cFL('['+cFL(iFL(item_added_date+' '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL(item_title[0:1],ps('cFL_color'))+item_title[1:]}, img=item_img)
+		_addon.add_directory({'mode': 'GetVideos', 'section': section, 'title': item_title, 'url': item_url, 'img': item_img },{'date': item_added_date, 'time': item_added_time, 'title':  cFL('['+cFL(iFL(item_added_date+' '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL(item_title[0:1],ps('cFL_color'))+item_title[1:]}, img=item_img, fanart=_artFanart)
 	#
 	#
 	#
@@ -322,10 +322,10 @@ def Menu_LoadCategories(section=_default_section_): #Categories
 	if (not cats): eod(); return
 	try:		AllCount=re.compile('<span style=".+?">\d+ - \d+ of (\d+) Videos', re.MULTILINE | re.IGNORECASE | re.DOTALL).findall(chtml)[0]
 	except:	AllCount='??'
-	_addon.add_directory({'mode': 'GetTitles', 'section': 'all', 'url': ps('_domain_url_cat') },{'title':  cFL('['+cFL(iFL(AllCount+' Videos '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL('A',ps('cFL_color'))+'ll'})
+	_addon.add_directory({'mode': 'GetTitles', 'section': 'all', 'url': ps('_domain_url_cat') },{'title':  cFL('['+cFL(iFL(AllCount+' Videos '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL('A',ps('cFL_color'))+'ll'},img=_artIcon, fanart=_artFanart)
 	for (cat_url,cat_name,video_count) in cats:
 		if (len(video_count)==1): video_count='0'+video_count
-		_addon.add_directory({'mode': 'GetTitles', 'section': cat_name, 'url': cat_url },{'title':  cFL('['+cFL(iFL(video_count+' Videos '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL(cat_name[0:1],ps('cFL_color'))+cat_name[1:]})
+		_addon.add_directory({'mode': 'GetTitles', 'section': cat_name, 'url': cat_url },{'title':  cFL('['+cFL(iFL(video_count+' Videos '),ps('cFL_color6'))+']',ps('cFL_color'))+'  '+cFL(cat_name[0:1],ps('cFL_color'))+cat_name[1:]},img=_artIcon, fanart=_artFanart)
 	#
 	set_view('list',515,False)
 	eod()
@@ -333,13 +333,13 @@ def Menu_LoadCategories(section=_default_section_): #Categories
 
 def Menu_MainMenu(): #The Main Menu
 	WhereAmI('@ the Main Menu')
-	_addon.add_directory({'mode': 'LoadCategories', 'section': ''},{'title':  cFL('V',ps('cFL_color'))+'ideos'})
+	_addon.add_directory({'mode': 'LoadCategories', 'section': ''},{'title':  cFL('V',ps('cFL_color'))+'ideos'},img=_artIcon, fanart=_artFanart)
 	#
 	#
 	#
-	_addon.add_directory({'mode': 'ResolverSettings'}, {'title':  cFL('U',ps('cFL_color'))+'rl-Resolver Settings'},is_folder=False		,img=art('turtle','.jpg')	,fanart=_artFanart)
-	_addon.add_directory({'mode': 'Settings'}, 				 {'title':  cFL('P',ps('cFL_color'))+'lugin Settings'}					,is_folder=False		,img=_artSun							,fanart=_artFanart)
-	_addon.add_directory({'mode': 'TextBoxFile', 'title': "[COLOR cornflowerblue]Local Change Log:[/COLOR]  %s"  % (__plugin__), 'url': ps('changelog.local')}, {'title': cFL('L',ps('cFL_color'))+'ocal Change Log'},					img=art('thechangelog','.jpg'),is_folder=False,fanart=_artFanart)
+	_addon.add_directory({'mode': 'ResolverSettings'}, {'title':  cFL('U',ps('cFL_color'))+'rl-Resolver Settings'},is_folder=False		,img=_artIcon	,fanart=_artFanart)
+	_addon.add_directory({'mode': 'Settings'}, 				 {'title':  cFL('P',ps('cFL_color'))+'lugin Settings'}					,is_folder=False		,img=_artIcon							,fanart=_artFanart)
+	_addon.add_directory({'mode': 'TextBoxFile', 'title': "[COLOR cornflowerblue]Local Change Log:[/COLOR]  %s"  % (__plugin__), 'url': ps('changelog.local')}, {'title': cFL('L',ps('cFL_color'))+'ocal Change Log'},					img=_artIcon,is_folder=False,fanart=_artFanart)
 	#_addon.add_directory({'mode': 'TextBoxUrl',  'title': "[COLOR cornflowerblue]Latest Change Log:[/COLOR]  %s" % (__plugin__), 'url': ps('changelog.url')}, 	{'title': cFL('L',ps('cFL_color'))+'atest Online Change Log'},	img=art('thechangelog','.jpg'),is_folder=False,fanart=_artFanart)
 	#_addon.add_directory({'mode': 'TextBoxUrl',  'title': "[COLOR cornflowerblue]Latest News:[/COLOR]  %s"       % (__plugin__), 'url': ps('news.url')}, 				{'title': cFL('L',ps('cFL_color'))+'atest Online News'},				img=_art404										,is_folder=False,fanart=_artFanart)
 	### ############ 

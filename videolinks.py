@@ -300,7 +300,11 @@ def vvVIDEOLINKS_doChecks_videofun(tt,url,mainurl,name,name2='none',scr='none',i
 def vvVIDEOLINKS_doChecks_dailymotion(tt,url,mainurl,name,name2='none',scr='none',imgfan='none',show='none',type2=0,mode=0):
 	url=urllib.unquote_plus(url)
 	if MySourcesV[tt] in url:#dailymotion ( Play: yes , Download: no )
-		if 'http://www.dailymotion.com/swf/' in url:
+		if ('/swf/video/' in url):
+			matcha=re.compile('/video/([0-9A-Za-z]+)').findall(url)[0]
+		if ('/sequence/' in url):
+			matcha=re.compile('/sequence/([0-9A-Za-z]+)').findall(url)[0]
+		elif 'http://www.dailymotion.com/swf/' in url:
 			matcha=url.split('/swf/')[1]
 			if '&' in matcha:
 				try:
@@ -310,6 +314,10 @@ def vvVIDEOLINKS_doChecks_dailymotion(tt,url,mainurl,name,name2='none',scr='none
 						matcha=re.compile('http://www.dailymotion.com/swf/(.+?)').findall(url)[0]
 					except:
 						matcha=url
+		elif ('/video/' in url) and ('_' in url):
+			matcha=re.compile('/video/([0-9A-Za-z]+)_').findall(url)[0]
+		elif ('/video/' in url):
+			matcha=re.compile('/video/([0-9A-Za-z]+)').findall(url)[0]
 		elif 'http://www.dailymotion.com/embed/video/' in url:
 			matcha=url.split('/video/')[1]
 		elif 'http://www.dailymotion.com/video/' in url:
@@ -317,36 +325,119 @@ def vvVIDEOLINKS_doChecks_dailymotion(tt,url,mainurl,name,name2='none',scr='none
 		#try:
 		#	##if (debugging==True): print'dailymotion matcha:',matcha,url,matchaa
 		#	#matcha=re.compile('http://www.dailymotion.com/swf/(.+?)&').findall(url)
-		linka='http://www.dailymotion.com/video/' + matcha
+		linka='http://www.dailymotion.com/video/'+matcha
 		#	#addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - [COLOR grey]*1a[/COLOR]',url,MyIconsV[tt],imgfan,show)
 		#	#addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - [COLOR grey]*1b[/COLOR]',linka,MyIconsV[tt],imgfan,show)
 		linkb=getURL(linka)
-		try:
-			matchb=re.compile('var flashvars = {"(.*?)"};').findall(linkb)
-			datab=urllib.unquote_plus(matchb[0])###if (debugging==True): print datab
-			vid_titlea=urllib.unquote_plus(re.compile('"title":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_title=urllib.unquote_plus(re.compile('"videoTitle":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_id=urllib.unquote_plus(re.compile('"videoId":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_desc=urllib.unquote_plus(re.compile('"videoDescription":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_screenshot=urllib.unquote_plus(re.compile('"videoPreviewURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_videoauthor=urllib.unquote_plus(re.compile('"videoOwnerLogin":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_lang=urllib.unquote_plus(re.compile('"videoLang":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_whenUploaded=urllib.unquote_plus(re.compile('"videoUploadDateTime":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_url=urllib.unquote_plus(re.compile('"video_url":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_autoURL=urllib.unquote_plus(re.compile('"autoURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_ldURL=urllib.unquote_plus(re.compile('"ldURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_sdURL=urllib.unquote_plus(re.compile('"sdURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
-			vid_visual_science_video_view=urllib.unquote_plus(re.compile('"visual_science_video_view":"(.*?)"').findall(datab)[0]).replace('\/','/')
-		except:
-			test=''
+		try: matchb=re.compile('var flashvars = {"(.*?)"};').findall(linkb)
+		except: matchb=''
+		try: datab=urllib.unquote_plus(matchb[0])###if (debugging==True): print datab
+		except: datab=''
+		#print datab
+		try: vid_titlea=urllib.unquote_plus(re.compile('"title":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_titlea=''
+		try: vid_title=urllib.unquote_plus(re.compile('"videoTitle":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_title=''
+		try: vid_id=urllib.unquote_plus(re.compile('"videoId":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_id=''
+		try: vid_desc=urllib.unquote_plus(re.compile('"videoDescription":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_desc=''
+		try: vid_screenshot=urllib.unquote_plus(re.compile('"videoPreviewURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_screenshot=''
+		try: vid_videoauthor=urllib.unquote_plus(re.compile('"videoOwnerLogin":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_videoauthor=''
+		try: vid_lang=urllib.unquote_plus(re.compile('"videoLang":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_lang=''
+		try: vid_whenUploaded=urllib.unquote_plus(re.compile('"videoUploadDateTime":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_whenUploaded=''
+		try: vid_url=urllib.unquote_plus(re.compile('"video_url":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_url=''
+		try: vid_autoURL=urllib.unquote_plus(re.compile('"autoURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_autoURL=''
+		try: vid_ldURL=urllib.unquote_plus(re.compile('"ldURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_ldURL=''
+		try: vid_sdURL=urllib.unquote_plus(re.compile('"sdURL":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_sdURL=''
+		try: vid_urlOG=urllib.unquote_plus(re.compile('<meta property="og:video" content="(.+?)"').findall(linkb)[0]).replace('\/','/')
+		except: vid_urlOG=''
+		if (vid_screenshot==''): 
+			try: vid_screenshot=urllib.unquote_plus(re.compile('<meta property="og:image" content="(.+?)"').findall(linkb)[0]).replace('\/','/')
+			except: vid_screenshot=''
+		try: vid_visual_science_video_view=urllib.unquote_plus(re.compile('"visual_science_video_view":"(.*?)"').findall(datab)[0]).replace('\/','/')
+		except: vid_visual_science_video_view=''
 		##if (debugging==True): print 'DailyMotion:',vid_url,vid_autoURL,vid_ldURL,vid_sdURL,vid_screenshot,vid_title
-		try:
-			addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (Url) [COLOR grey][/COLOR]',vid_url,vid_screenshot,imgfan,vid_title)
-			#addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (AutoUrl) [COLOR grey][/COLOR]',vid_autoURL,vid_screenshot,imgfan,vid_title)# doesn't seem to work atm #
-			addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (LD) [COLOR grey][/COLOR]',vid_ldURL,vid_screenshot,imgfan,vid_title)
-			addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (SD) [COLOR grey][/COLOR]',vid_sdURL,vid_screenshot,imgfan,vid_title)
-		except:
-			VaddDir('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - [COLOR grey]Error[/COLOR]', '', 1, MyIconsV[tt], fanart)
+		try: linkc='http://www.dailymotion.com/embed/video/'+matcha
+		except: linkc=''
+		try: linkd=urllib.unquote_plus(getURL(linkc))
+		except: linkd=''
+		try: dm_live =urllib.unquote_plus(re.compile('live_rtsp_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+		except: dm_live =''
+		try: dm_1080p=urllib.unquote_plus(re.compile('"stream_h264_hd1080_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+		except: dm_1080p=''
+		try: dm_720p =urllib.unquote_plus(re.compile('"stream_h264_hd_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+		except: dm_720p =''
+		try: dm_high =urllib.unquote_plus(re.compile('"stream_h264_hq_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+		except: dm_high =''
+		try: dm_low  =urllib.unquote_plus(re.compile('"stream_h264_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+		except: dm_low  =''
+		try: dm_low2 =urllib.unquote_plus(re.compile('"stream_h264_ld_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+		except: dm_low2 =''
+		if (vid_screenshot==''): 
+			try: vid_screenshot=urllib.unquote_plus(re.compile('"thumbnail_large_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+			except: vid_screenshot=''
+		if (vid_screenshot==''): 
+			try: vid_screenshot=urllib.unquote_plus(re.compile('"thumbnail_medium_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+			except: vid_screenshot=''
+		if (vid_screenshot==''): 
+			try: vid_screenshot=urllib.unquote_plus(re.compile('"thumbnail_url":"(.+?)"', re.DOTALL).findall(linkd)[0]).replace('\/','/')
+			except: vid_screenshot=''
+		deb('dm_live',dm_live)
+		deb('dm_1080p',dm_1080p)
+		deb('dm_720p',dm_720p)
+		deb('dm_high',dm_high)
+		deb('dm_low',dm_low)
+		deb('dm_low2',dm_low2)
+		deb('vid_urlOG',vid_urlOG)
+		deb('vid_url',vid_url)
+		deb('vid_autoURL',vid_autoURL)
+		deb('vid_ldURL',vid_ldURL)
+		deb('vid_sdURL',vid_sdURL)
+		if (vid_screenshot==''): vid_screenshot=scr
+		if (dm_live is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (dm_live) [COLOR grey][/COLOR]',dm_live,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (dm_1080p is not ''): 
+			try: addLink('[COLOR '+ MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (dm_1080p) [COLOR grey][/COLOR]',dm_1080p,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (dm_720p is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (dm_720p) [COLOR grey][/COLOR]',dm_720p,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (dm_high is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (dm_high) [COLOR grey][/COLOR]',dm_high,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (dm_low is not ''):  
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (dm_low) [COLOR grey][/COLOR]',dm_low,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (dm_low2 is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (dm_low2) [COLOR grey][/COLOR]',dm_low2,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (vid_urlOG is not '') and ('swf' not in vid_urlOG): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (OG) [COLOR grey][/COLOR]',vid_urlOG,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (vid_url is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (Url) [COLOR grey][/COLOR]',vid_url,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		#if (vid_autoURL is not ''): 
+		#	try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (AutoUrl) [COLOR grey][/COLOR]',vid_autoURL,vid_screenshot,imgfan,vid_title)# doesn't seem to work atm #
+		#	except: t=''
+		if (vid_ldURL is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (LD) [COLOR grey][/COLOR]',vid_ldURL,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		if (vid_sdURL is not ''): 
+			try: addLink('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - (SD) [COLOR grey][/COLOR]',vid_sdURL,vid_screenshot,imgfan,vid_title)
+			except: t=''
+		#except:
+		#	VaddDir('[COLOR ' + MyColorsV[tt] + ']' + MyNamesV[tt] + '[/COLOR]' + ' - [COLOR grey]Error[/COLOR]', '', 1, MyIconsV[tt], fanart)
 
 def vvVIDEOLINKS_doChecks_videoweed(tt,url,mainurl,name,name2='none',scr='none',imgfan='none',show='none',type2=0,mode=0):
 	if MySourcesV[tt] in url:#videoweed#no-screenshot###Needs worked on, wont show video.
