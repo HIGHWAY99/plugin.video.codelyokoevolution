@@ -13,7 +13,10 @@ __authors__	=	"The Highway"
 plugin_id		=	"plugin.video.codelyokoevolution"
 ### ############################################################################################################
 ### ############################################################################################################
-import xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs,urlresolver,urllib,urllib2,re,os,sys,socket,string,StringIO,logging,random,array
+import xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+try: import urlresolver
+except: t=''
+import urllib,urllib2,re,os,sys,socket,string,StringIO,logging,random,array
 import teh_tools
 from teh_tools import *
 try: import json

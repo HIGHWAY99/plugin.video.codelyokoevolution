@@ -12,7 +12,12 @@ __authors__	=	"The Highway"
 plugin_id		=	"plugin.video.codelyokoevolution"
 ### ############################################################################################################
 ### ############################################################################################################
-import xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs,urlresolver,urllib,urllib2,re,os,sys,htmllib,string,StringIO,logging,random,array,time,requests,datetime
+import xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+try: import urlresolver
+except: t=''
+import urllib,urllib2,re,os,sys,htmllib,string,StringIO,logging,random,array,time,datetime
+try: import requests ### <import addon="script.module.requests" version="1.1.0"/> ### 
+except: t=''				 ### See https://github.com/kennethreitz/requests ### 
 try: import json
 except ImportError: import simplejson as json
 try: import StorageServer

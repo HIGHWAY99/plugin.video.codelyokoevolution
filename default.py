@@ -2,7 +2,7 @@
 ###	#	
 ### # Project: 			#		Code Lyoko Evolution - by The Highway 2013.
 ### # Author: 			#		The Highway
-### # Version:			#		v0.1.1
+### # Version:			#		v0.1.2
 ### # Description: 	#		http://codelyokoevolutionfan.webs.com/
 ###	#	
 ### ############################################################################################################
@@ -12,8 +12,10 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
 import urllib, urllib2
 import re,os,sys,string,StringIO,array
 import htmllib,logging,random,time,datetime
-import requests
-import urlresolver
+#try: import requests ### <import addon="script.module.requests" version="1.1.0"/> ### 
+#except: t=''				 ### See https://github.com/kennethreitz/requests ### 
+try: import urlresolver
+except: t=''
 #import unicodedata
 #import zipfile ### Removed because it caused videos to not play. ###
 import HTMLParser, htmlentitydefs
